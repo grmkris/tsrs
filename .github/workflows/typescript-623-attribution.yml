@@ -42,15 +42,15 @@ jobs:
           SHAS
       - name: Prepare MUI Docs
         run: python3 bench/run.py --setup-only --projects mui-docs
-      - name: Count instructions at one and four checkers
+      - name: Count instructions at eight checkers
         shell: bash
         run: |
           set -euo pipefail
           unset TSRS_HISTORY TS_TEST_PROGRAM_SINGLE_THREADED RAYON_NUM_THREADS || true
           mkdir -p /tmp/tsrs-counts
           project="$GITHUB_WORKSPACE/bench/.work/solutions/mui-docs/docs"
-          for mode in single four; do
-            for rep in 0 1 2 3 4 5 6; do
+          for mode in eight; do
+            for rep in 0 1 2 3 4 5 6 7 8 9; do
               if [ $((rep % 2)) -eq 0 ]; then
                 order="0 58 59 62 63 112"
               else
@@ -61,7 +61,7 @@ jobs:
                 if [ "$mode" = single ]; then
                   RAYON_NUM_THREADS=1 python3 bench/count.py "$prefix.json" -- "/tmp/tsrs-bins/$stage" -p "$project" --noEmit --incremental false --pretty false --singleThreaded > "$prefix.stdout" 2> "$prefix.stderr"
                 else
-                  python3 bench/count.py "$prefix.json" -- "/tmp/tsrs-bins/$stage" -p "$project" --noEmit --incremental false --pretty false --checkers 4 > "$prefix.stdout" 2> "$prefix.stderr"
+                  python3 bench/count.py "$prefix.json" -- "/tmp/tsrs-bins/$stage" -p "$project" --noEmit --incremental false --pretty false --checkers 8 > "$prefix.stdout" 2> "$prefix.stderr"
                 fi
                 jq -e '.instructions != null and .exit == 0' "$prefix.json" > /dev/null
                 count="$(jq -r '.instructions' "$prefix.json")"
@@ -73,6 +73,6 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: ts623-attribution
+          name: ts623-attribution-eight
           path: /tmp/tsrs-counts
           retention-days: 7
