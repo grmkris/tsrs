@@ -1,0 +1,78 @@
+name: TypeScript 623 instruction attribution
+
+on:
+  push:
+    branches: [perf/ts623-attribution-20261021]
+
+jobs:
+  measure:
+    runs-on: nscloud-ubuntu-24.04-amd64-8x16
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: oxc-project/setup-rust@3d6fb132fbe7cdcb66bf8ec193911c2945369d12 # v1.0.17
+        with:
+          save-cache: false
+          cache-key: ts623-attribution
+      - uses: oxc-project/setup-node@f46a72f95efdc55273fcd042d61c84e723b2892c # v1.4.1
+        with:
+          registry-url: ""
+      - name: Build commit boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/tsrs-bins
+          while read -r stage sha; do
+            git -c advice.detachedHead=false checkout --detach "$sha"
+            cargo build --release --locked -p tsrs_cli
+            cp target/release/tsrs "/tmp/tsrs-bins/$stage"
+            sha256sum "/tmp/tsrs-bins/$stage"
+          done <<'SHAS'
+          0 357d1d3ec23180eae94a8485b8b7444487a7ea5f
+          58 65ea9cb9b475b817066c469248b328ac51cb5b9a
+          59 636f0d6b4e91ff90a1f3ba96c355e8f7fb244bee
+          62 f8698a16c102f67c430b3e4395a6c227108431c4
+          63 695f6bb1deee067a744809f5cf7d84822c4b903e
+          112 f429436883ca10bfc34cf71a550d36580f9da3c6
+          SHAS
+      - name: Prepare MUI Docs
+        run: python3 bench/run.py --setup-only --projects mui-docs
+      - name: Count instructions at one and four checkers
+        shell: bash
+        run: |
+          set -euo pipefail
+          unset TSRS_HISTORY TS_TEST_PROGRAM_SINGLE_THREADED RAYON_NUM_THREADS || true
+          mkdir -p /tmp/tsrs-counts
+          project="$GITHUB_WORKSPACE/bench/.work/solutions/mui-docs/docs"
+          for mode in single four; do
+            for rep in 0 1 2 3 4 5 6; do
+              if [ $((rep % 2)) -eq 0 ]; then
+                order="0 58 59 62 63 112"
+              else
+                order="112 63 62 59 58 0"
+              fi
+              for stage in $order; do
+                prefix="/tmp/tsrs-counts/$mode-$stage-$rep"
+                if [ "$mode" = single ]; then
+                  RAYON_NUM_THREADS=1 python3 bench/count.py "$prefix.json" -- "/tmp/tsrs-bins/$stage" -p "$project" --noEmit --incremental false --pretty false --singleThreaded > "$prefix.stdout" 2> "$prefix.stderr"
+                else
+                  python3 bench/count.py "$prefix.json" -- "/tmp/tsrs-bins/$stage" -p "$project" --noEmit --incremental false --pretty false --checkers 4 > "$prefix.stdout" 2> "$prefix.stderr"
+                fi
+                jq -e '.instructions != null and .exit == 0' "$prefix.json" > /dev/null
+                count="$(jq -r '.instructions' "$prefix.json")"
+                digest="$(sha256sum "$prefix.stdout" | cut -d ' ' -f 1)"
+                echo "$mode $stage $rep $count $digest"
+              done
+            done
+          done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: ts623-attribution
+          path: /tmp/tsrs-counts
+          retention-days: 7
