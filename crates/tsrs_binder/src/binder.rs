@@ -1532,7 +1532,7 @@ impl Binder {
         // that would clash with the built-in 'prototype' for the class.
         let prototype_symbol =
             self.new_symbol(SymbolFlags::Property | SymbolFlags::Prototype, "prototype");
-        let symbol_export = (*ast::get_exports(symbol)).get(prototype_symbol.name());
+        let symbol_export = (*ast::get_exports(symbol)).get(prototype_symbol.name.get());
         if let Some(symbol_export) = symbol_export {
             let first_declaration = symbol_export.declarations()[0];
             self.error_on_node(
@@ -1541,7 +1541,7 @@ impl Binder {
                 &[&ast::symbol_name(prototype_symbol)],
             );
         }
-        ast::get_exports(symbol).set(prototype_symbol.name(), prototype_symbol);
+        ast::get_exports(symbol).set(prototype_symbol.name.get(), prototype_symbol);
         prototype_symbol.set_parent(Some(symbol));
     }
 
@@ -1583,7 +1583,7 @@ impl Binder {
             self.new_symbol(SymbolFlags::TypeLiteral, ast::InternalSymbolNameType);
         self.add_declaration_to_symbol(type_literal_symbol, node, SymbolFlags::TypeLiteral);
         let members = SymbolTable::new();
-        members.set(symbol.name(), symbol);
+        members.set(symbol.name.get(), symbol);
         type_literal_symbol.set_members(Some(members));
     }
 
@@ -1651,10 +1651,10 @@ impl Binder {
         };
         if let Some(export_equals) = (*module_exports).get(ast::InternalSymbolNameExportEquals) {
             for symbol in module_exports.values() {
-                if symbol.name() != ast::InternalSymbolNameExportEquals
+                if symbol.name.get() != ast::InternalSymbolNameExportEquals
                     && symbol.flags.get().intersects(SymbolFlags::Type | SymbolFlags::Namespace)
                 {
-                    ast::get_exports(export_equals).set(symbol.name(), symbol);
+                    ast::get_exports(export_equals).set(symbol.name.get(), symbol);
                     export_equals
                         .flags
                         .set(export_equals.flags.get() | SymbolFlags::NamespaceModule);
