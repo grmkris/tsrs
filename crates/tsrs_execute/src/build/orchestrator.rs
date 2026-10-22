@@ -1767,6 +1767,10 @@ mod scheduling_tests {
     use crate::build::buildtask::upstreamTask;
 
     #[test]
+    #[expect(
+        clippy::disallowed_methods,
+        reason = "the test orchestrator retains its system for the process lifetime"
+    )]
     fn schedules_full_selected_and_references_only_graphs_by_dependency_depth() {
         let sys: &'static dyn System = Box::leak(Box::new(crate::sys::new_system()));
         let host = crate::execute::parse_config_host(sys);
