@@ -1,0 +1,275 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="2122" viewBox="0 0 1400 2122" font-family="system-ui, sans-serif" role="img" aria-labelledby="title description">
+<title id="title">TypeScript type checking benchmark</title>
+<desc id="description">Wall time and peak resident memory for 19 projects. Arithmetic means of 10 runs, with 3 warmups. tsrs, TypeScript 7.1.0-dev.20261023.1, TypeScript 7.0.2.</desc>
+<rect x="0" y="0" width="1400" height="2122" fill="#f4f3ec" />
+<text x="40" y="57" font-size="24" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">TypeScript type checking</text>
+<text x="40" y="86" font-size="13" font-weight="400" text-anchor="start" fill="#6f6876" aria-hidden="true">Namespace `nscloud-ubuntu-24.04-amd64-8x16` (8 vCPU, 16 GB RAM, Linux x64, AMD EPYC). 4 checkers, 8 worker CPUs.</text>
+<line x1="40" y1="103" x2="1360" y2="103" stroke="#dcdad0" stroke-width="1"/>
+<rect x="45" y="122" width="14" height="14" fill="#0d6a73" />
+<text x="67" y="135" font-size="13" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">tsrs</text>
+<rect x="235" y="122" width="14" height="14" fill="#3178c6" />
+<text x="257" y="135" font-size="13" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">TypeScript 7.1.0-dev.20261023.1</text>
+<rect x="425" y="122" width="14" height="14" fill="#76a7d7" />
+<text x="447" y="135" font-size="13" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">TypeScript 7.0.2</text>
+<text x="42" y="174" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">Project</text>
+<text x="220" y="174" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">Wall time</text>
+<text x="800" y="174" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">Peak RSS</text>
+<rect x="30" y="185" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="239" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">Compiler-Unions</text>
+<rect x="220" y="195" width="3.59" height="16" fill="#0d6a73" />
+<text x="231.59" y="208" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.21 s</text>
+<rect x="800" y="195" width="3.61" height="16" fill="#0d6a73" />
+<text x="811.61" y="208" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.08 GiB</text>
+<rect x="220" y="221" width="6.9" height="16" fill="#3178c6" />
+<text x="234.9" y="234" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.40 s</text>
+<rect x="800" y="221" width="6.76" height="16" fill="#3178c6" />
+<text x="814.76" y="234" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.15 GiB</text>
+<rect x="220" y="247" width="12.32" height="16" fill="#76a7d7" />
+<text x="240.32" y="260" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.72 s</text>
+<rect x="800" y="247" width="10.93" height="16" fill="#76a7d7" />
+<text x="818.93" y="260" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.24 GiB</text>
+<text x="42" y="337" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">Compiler</text>
+<rect x="220" y="293" width="3.26" height="16" fill="#0d6a73" />
+<text x="231.26" y="306" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.19 s</text>
+<rect x="800" y="293" width="3.45" height="16" fill="#0d6a73" />
+<text x="811.45" y="306" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.08 GiB</text>
+<rect x="220" y="319" width="6.38" height="16" fill="#3178c6" />
+<text x="234.38" y="332" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.37 s</text>
+<rect x="800" y="319" width="6.01" height="16" fill="#3178c6" />
+<text x="814.01" y="332" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.13 GiB</text>
+<rect x="220" y="345" width="11.63" height="16" fill="#76a7d7" />
+<text x="239.63" y="358" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.68 s</text>
+<rect x="800" y="345" width="9.63" height="16" fill="#76a7d7" />
+<text x="817.63" y="358" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.21 GiB</text>
+<rect x="30" y="381" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="435" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">cal-diy</text>
+<rect x="220" y="391" width="29.47" height="16" fill="#0d6a73" />
+<text x="257.47" y="404" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.72 s</text>
+<rect x="800" y="391" width="49.22" height="16" fill="#0d6a73" />
+<text x="857.22" y="404" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.08 GiB</text>
+<rect x="220" y="417" width="100.52" height="16" fill="#3178c6" />
+<text x="328.52" y="430" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">5.88 s</text>
+<rect x="800" y="417" width="135.08" height="16" fill="#3178c6" />
+<text x="943.08" y="430" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">2.97 GiB</text>
+<rect x="220" y="443" width="131.97" height="16" fill="#76a7d7" />
+<text x="359.97" y="456" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">7.71 s</text>
+<rect x="800" y="443" width="208.44" height="16" fill="#76a7d7" />
+<text x="1016.44" y="456" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">4.58 GiB</text>
+<text x="42" y="533" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">date-fns</text>
+<rect x="220" y="489" width="2.02" height="16" fill="#0d6a73" />
+<text x="230.02" y="502" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.12 s</text>
+<rect x="800" y="489" width="5.74" height="16" fill="#0d6a73" />
+<text x="813.74" y="502" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.13 GiB</text>
+<rect x="220" y="515" width="5.08" height="16" fill="#3178c6" />
+<text x="233.08" y="528" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.30 s</text>
+<rect x="800" y="515" width="10.93" height="16" fill="#3178c6" />
+<text x="818.93" y="528" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.24 GiB</text>
+<rect x="220" y="541" width="5.75" height="16" fill="#76a7d7" />
+<text x="233.75" y="554" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.34 s</text>
+<rect x="800" y="541" width="13.02" height="16" fill="#76a7d7" />
+<text x="821.02" y="554" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.29 GiB</text>
+<rect x="30" y="577" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="631" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">drizzle-orm</text>
+<rect x="220" y="587" width="2" height="16" fill="#0d6a73" />
+<text x="230" y="600" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.04 s</text>
+<rect x="800" y="587" width="3.95" height="16" fill="#0d6a73" />
+<text x="811.95" y="600" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.09 GiB</text>
+<rect x="220" y="613" width="2.51" height="16" fill="#3178c6" />
+<text x="230.51" y="626" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.15 s</text>
+<rect x="800" y="613" width="7.08" height="16" fill="#3178c6" />
+<text x="815.08" y="626" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.16 GiB</text>
+<rect x="220" y="639" width="8.81" height="16" fill="#76a7d7" />
+<text x="236.81" y="652" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.52 s</text>
+<rect x="800" y="639" width="20.17" height="16" fill="#76a7d7" />
+<text x="828.17" y="652" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.44 GiB</text>
+<text x="42" y="729" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">formbricks-web</text>
+<rect x="220" y="685" width="32" height="16" fill="#0d6a73" />
+<text x="260" y="698" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.87 s</text>
+<rect x="800" y="685" width="61.95" height="16" fill="#0d6a73" />
+<text x="869.95" y="698" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.36 GiB</text>
+<rect x="220" y="711" width="114.54" height="16" fill="#3178c6" />
+<text x="342.54" y="724" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">6.70 s</text>
+<rect x="800" y="711" width="191.73" height="16" fill="#3178c6" />
+<text x="999.73" y="724" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">4.22 GiB</text>
+<rect x="220" y="737" width="145.37" height="16" fill="#76a7d7" />
+<text x="373.37" y="750" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">8.50 s</text>
+<rect x="800" y="737" width="262.12" height="16" fill="#76a7d7" />
+<text x="1070.12" y="750" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">5.76 GiB</text>
+<rect x="30" y="773" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="827" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">mikro-orm</text>
+<rect x="220" y="783" width="35.27" height="16" fill="#0d6a73" />
+<text x="263.27" y="796" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">2.06 s</text>
+<rect x="800" y="783" width="57.85" height="16" fill="#0d6a73" />
+<text x="865.85" y="796" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.27 GiB</text>
+<rect x="220" y="809" width="141.15" height="16" fill="#3178c6" />
+<text x="369.15" y="822" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">8.25 s</text>
+<rect x="800" y="809" width="181.24" height="16" fill="#3178c6" />
+<text x="989.24" y="822" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">3.98 GiB</text>
+<rect x="220" y="835" width="186.69" height="16" fill="#76a7d7" />
+<text x="414.69" y="848" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">10.91 s</text>
+<rect x="800" y="835" width="306.4" height="16" fill="#76a7d7" />
+<text x="1114.4" y="848" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">6.74 GiB</text>
+<text x="42" y="925" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">mui-docs</text>
+<rect x="220" y="881" width="23.39" height="16" fill="#0d6a73" />
+<text x="251.39" y="894" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.37 s</text>
+<rect x="800" y="881" width="45.29" height="16" fill="#0d6a73" />
+<text x="853.29" y="894" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.00 GiB</text>
+<rect x="220" y="907" width="102.28" height="16" fill="#3178c6" />
+<text x="330.28" y="920" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">5.98 s</text>
+<rect x="800" y="907" width="149.27" height="16" fill="#3178c6" />
+<text x="957.27" y="920" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">3.28 GiB</text>
+<rect x="220" y="933" width="223.38" height="16" fill="#76a7d7" />
+<text x="451.38" y="946" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">13.06 s</text>
+<rect x="800" y="933" width="350" height="16" fill="#76a7d7" />
+<text x="1158" y="946" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">7.69 GiB</text>
+<rect x="30" y="969" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="1023" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">next-packages-next</text>
+<rect x="220" y="979" width="11.92" height="16" fill="#0d6a73" />
+<text x="239.92" y="992" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.70 s</text>
+<rect x="800" y="979" width="23.84" height="16" fill="#0d6a73" />
+<text x="831.84" y="992" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.52 GiB</text>
+<rect x="220" y="1005" width="42.28" height="16" fill="#3178c6" />
+<text x="270.28" y="1018" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">2.47 s</text>
+<rect x="800" y="1005" width="61.41" height="16" fill="#3178c6" />
+<text x="869.41" y="1018" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.35 GiB</text>
+<rect x="220" y="1031" width="60.78" height="16" fill="#76a7d7" />
+<text x="288.78" y="1044" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">3.55 s</text>
+<rect x="800" y="1031" width="85.8" height="16" fill="#76a7d7" />
+<text x="893.8" y="1044" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.89 GiB</text>
+<text x="42" y="1121" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">next-root</text>
+<rect x="220" y="1077" width="9.33" height="16" fill="#0d6a73" />
+<text x="237.33" y="1090" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.55 s</text>
+<rect x="800" y="1077" width="18.27" height="16" fill="#0d6a73" />
+<text x="826.27" y="1090" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.40 GiB</text>
+<rect x="220" y="1103" width="27.91" height="16" fill="#3178c6" />
+<text x="255.91" y="1116" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.63 s</text>
+<rect x="800" y="1103" width="46.59" height="16" fill="#3178c6" />
+<text x="854.59" y="1116" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.02 GiB</text>
+<rect x="220" y="1129" width="36.84" height="16" fill="#76a7d7" />
+<text x="264.84" y="1142" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">2.15 s</text>
+<rect x="800" y="1129" width="65.05" height="16" fill="#76a7d7" />
+<text x="873.05" y="1142" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.43 GiB</text>
+<rect x="30" y="1165" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="1219" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">nuxt</text>
+<rect x="220" y="1175" width="5.25" height="16" fill="#0d6a73" />
+<text x="233.25" y="1188" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.31 s</text>
+<rect x="800" y="1175" width="15.81" height="16" fill="#0d6a73" />
+<text x="823.81" y="1188" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.35 GiB</text>
+<rect x="220" y="1201" width="19.56" height="16" fill="#3178c6" />
+<text x="247.56" y="1214" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.14 s</text>
+<rect x="800" y="1201" width="41.17" height="16" fill="#3178c6" />
+<text x="849.17" y="1214" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.91 GiB</text>
+<rect x="220" y="1227" width="21.84" height="16" fill="#76a7d7" />
+<text x="249.84" y="1240" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.28 s</text>
+<rect x="800" y="1227" width="52.16" height="16" fill="#76a7d7" />
+<text x="860.16" y="1240" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.15 GiB</text>
+<text x="42" y="1317" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">playwright</text>
+<rect x="220" y="1273" width="9.31" height="16" fill="#0d6a73" />
+<text x="237.31" y="1286" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.54 s</text>
+<rect x="800" y="1273" width="13.85" height="16" fill="#0d6a73" />
+<text x="821.85" y="1286" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.30 GiB</text>
+<rect x="220" y="1299" width="21.74" height="16" fill="#3178c6" />
+<text x="249.74" y="1312" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.27 s</text>
+<rect x="800" y="1299" width="34.22" height="16" fill="#3178c6" />
+<text x="842.22" y="1312" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.75 GiB</text>
+<rect x="220" y="1325" width="32.13" height="16" fill="#76a7d7" />
+<text x="260.13" y="1338" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.88 s</text>
+<rect x="800" y="1325" width="47.66" height="16" fill="#76a7d7" />
+<text x="855.66" y="1338" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.05 GiB</text>
+<rect x="30" y="1361" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="1415" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">storybook</text>
+<rect x="220" y="1371" width="6.31" height="16" fill="#0d6a73" />
+<text x="234.31" y="1384" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.37 s</text>
+<rect x="800" y="1371" width="16.37" height="16" fill="#0d6a73" />
+<text x="824.37" y="1384" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.36 GiB</text>
+<rect x="220" y="1397" width="21.95" height="16" fill="#3178c6" />
+<text x="249.95" y="1410" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.28 s</text>
+<rect x="800" y="1397" width="43.1" height="16" fill="#3178c6" />
+<text x="851.1" y="1410" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.95 GiB</text>
+<rect x="220" y="1423" width="31.97" height="16" fill="#76a7d7" />
+<text x="259.97" y="1436" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.87 s</text>
+<rect x="800" y="1423" width="62.54" height="16" fill="#76a7d7" />
+<text x="870.54" y="1436" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.37 GiB</text>
+<text x="42" y="1513" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">supabase-studio</text>
+<rect x="220" y="1469" width="40.25" height="16" fill="#0d6a73" />
+<text x="268.25" y="1482" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">2.35 s</text>
+<rect x="800" y="1469" width="51.21" height="16" fill="#0d6a73" />
+<text x="859.21" y="1482" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.13 GiB</text>
+<rect x="220" y="1495" width="161.46" height="16" fill="#3178c6" />
+<text x="389.46" y="1508" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">9.44 s</text>
+<rect x="800" y="1495" width="142.79" height="16" fill="#3178c6" />
+<text x="950.79" y="1508" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">3.14 GiB</text>
+<rect x="220" y="1521" width="222.19" height="16" fill="#76a7d7" />
+<text x="450.19" y="1534" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">12.99 s</text>
+<rect x="800" y="1521" width="217.86" height="16" fill="#76a7d7" />
+<text x="1025.86" y="1534" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">4.79 GiB</text>
+<rect x="30" y="1557" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="1611" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">t3code-server</text>
+<rect x="220" y="1567" width="50.01" height="16" fill="#0d6a73" />
+<text x="278.01" y="1580" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">2.92 s</text>
+<rect x="800" y="1567" width="50.23" height="16" fill="#0d6a73" />
+<text x="858.23" y="1580" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.10 GiB</text>
+<rect x="220" y="1593" width="206.3" height="16" fill="#3178c6" />
+<text x="434.3" y="1606" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">12.06 s</text>
+<rect x="800" y="1593" width="197.36" height="16" fill="#3178c6" />
+<text x="1005.36" y="1606" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">4.34 GiB</text>
+<rect x="220" y="1619" width="350" height="16" fill="#76a7d7" />
+<text x="578" y="1632" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">20.46 s</text>
+<rect x="800" y="1619" width="288.69" height="16" fill="#76a7d7" />
+<text x="1096.69" y="1632" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">6.35 GiB</text>
+<text x="42" y="1709" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">typeorm</text>
+<rect x="220" y="1665" width="5.05" height="16" fill="#0d6a73" />
+<text x="233.05" y="1678" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.30 s</text>
+<rect x="800" y="1665" width="9.65" height="16" fill="#0d6a73" />
+<text x="817.65" y="1678" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.21 GiB</text>
+<rect x="220" y="1691" width="14.67" height="16" fill="#3178c6" />
+<text x="242.67" y="1704" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.86 s</text>
+<rect x="800" y="1691" width="20.13" height="16" fill="#3178c6" />
+<text x="828.13" y="1704" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.44 GiB</text>
+<rect x="220" y="1717" width="20.77" height="16" fill="#76a7d7" />
+<text x="248.77" y="1730" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.21 s</text>
+<rect x="800" y="1717" width="36.11" height="16" fill="#76a7d7" />
+<text x="844.11" y="1730" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.79 GiB</text>
+<rect x="30" y="1753" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="1807" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">vscode</text>
+<rect x="220" y="1763" width="53.27" height="16" fill="#0d6a73" />
+<text x="281.27" y="1776" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">3.11 s</text>
+<rect x="800" y="1763" width="78.15" height="16" fill="#0d6a73" />
+<text x="886.15" y="1776" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.72 GiB</text>
+<rect x="220" y="1789" width="160.98" height="16" fill="#3178c6" />
+<text x="388.98" y="1802" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">9.41 s</text>
+<rect x="800" y="1789" width="244.97" height="16" fill="#3178c6" />
+<text x="1052.97" y="1802" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">5.39 GiB</text>
+<rect x="220" y="1815" width="246.61" height="16" fill="#76a7d7" />
+<text x="474.61" y="1828" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">14.41 s</text>
+<rect x="800" y="1815" width="339.96" height="16" fill="#76a7d7" />
+<text x="1147.96" y="1828" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">7.47 GiB</text>
+<text x="42" y="1905" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">webpack</text>
+<rect x="220" y="1861" width="6.73" height="16" fill="#0d6a73" />
+<text x="234.73" y="1874" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.39 s</text>
+<rect x="800" y="1861" width="16.44" height="16" fill="#0d6a73" />
+<text x="824.44" y="1874" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.36 GiB</text>
+<rect x="220" y="1887" width="22.07" height="16" fill="#3178c6" />
+<text x="250.07" y="1900" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.29 s</text>
+<rect x="800" y="1887" width="37.53" height="16" fill="#3178c6" />
+<text x="845.53" y="1900" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.83 GiB</text>
+<rect x="220" y="1913" width="27.77" height="16" fill="#76a7d7" />
+<text x="255.77" y="1926" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.62 s</text>
+<rect x="800" y="1913" width="53.43" height="16" fill="#76a7d7" />
+<text x="861.43" y="1926" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.17 GiB</text>
+<rect x="30" y="1949" width="1340" height="98" fill="#ffffff" />
+<text x="42" y="2003" font-size="14" font-weight="700" text-anchor="start" fill="#16171d" aria-hidden="true">xstate-main</text>
+<rect x="220" y="1959" width="4.83" height="16" fill="#0d6a73" />
+<text x="232.83" y="1972" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.28 s</text>
+<rect x="800" y="1959" width="10" height="16" fill="#0d6a73" />
+<text x="818" y="1972" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.22 GiB</text>
+<rect x="220" y="1985" width="16.1" height="16" fill="#3178c6" />
+<text x="244.1" y="1998" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.94 s</text>
+<rect x="800" y="1985" width="24.94" height="16" fill="#3178c6" />
+<text x="832.94" y="1998" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.55 GiB</text>
+<rect x="220" y="2011" width="21.59" height="16" fill="#76a7d7" />
+<text x="249.59" y="2024" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">1.26 s</text>
+<rect x="800" y="2011" width="32.86" height="16" fill="#76a7d7" />
+<text x="840.86" y="2024" font-size="12" font-weight="400" text-anchor="start" fill="#16171d" aria-hidden="true">0.72 GiB</text>
+<text x="40" y="2087" font-size="12" font-weight="400" text-anchor="start" fill="#6f6876" aria-hidden="true">Means per compiler and project; no averaging across projects. Measured 2026-10-23.</text>
+</svg>
