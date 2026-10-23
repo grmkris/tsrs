@@ -2372,6 +2372,16 @@ impl Checker {
             ast::is_plain_js_file(source_symbol_file, self.compiler_options.check_js);
         let is_target_plain_js =
             ast::is_plain_js_file(target_symbol_file, self.compiler_options.check_js);
+        // Every checker merges the globals, so an error no program query reads (all of its locations in declaration
+        // files under `skipLibCheck`) would otherwise be built once per checker.
+        let reported = |symbol: P<Symbol>| {
+            symbol.declarations().iter().any(|&d| !self.is_unreported_error_node(d))
+        };
+        let any_reported =
+            (!is_source_plain_js && reported(source)) || (!is_target_plain_js && reported(target));
+        if !any_reported {
+            return;
+        }
         let symbol_name = self.symbol_to_string(source);
         if !is_source_plain_js {
             self.add_duplicate_declaration_errors_for_symbols(
@@ -2414,6 +2424,9 @@ impl Checker {
         symbol_name: &str,
         related_nodes: &[P<Node>],
     ) {
+        if self.is_unreported_error_node(node) {
+            return;
+        }
         let error_node = get_adjusted_node_for_error(node);
         let err = self.lookup_or_issue_error(error_node, message, &[&symbol_name]);
         for &related_node in related_nodes {
@@ -2464,6 +2477,13 @@ pub fn get_adjusted_node_for_error(node: P<Node>) -> P<Node> {
 }
 
 impl Checker {
+    /// Whether a diagnostic at `node` is never reported: `Program::skip_type_checking` skips the declaration files
+    /// under `skipLibCheck`, and no program query reads a skipped file's checker diagnostics.
+    fn is_unreported_error_node(&self, node: P<Node>) -> bool {
+        self.compiler_options.skip_lib_check.is_true()
+            && ast::get_source_file_of_node(node).is_some_and(|file| file.is_declaration_file())
+    }
+
     // checker.go:14505
     pub(crate) fn lookup_or_issue_error(
         &mut self,
