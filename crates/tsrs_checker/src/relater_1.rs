@@ -20,6 +20,13 @@ fn reborrow_reporter<'b>(r: &'b mut Option<ErrorReporter<'_>>) -> Option<ErrorRe
     }
 }
 
+/// tsrs-only: the exact flags of an enum member's literal type (`get_enum_literal_type`).
+#[inline]
+fn is_enum_literal_flags(flags: TypeFlags) -> bool {
+    flags == TypeFlags::EnumLiteral | TypeFlags::NumberLiteral
+        || flags == TypeFlags::EnumLiteral | TypeFlags::StringLiteral
+}
+
 /// Go `chain.args...`: stored diagnostic arguments are pre-formatted strings.
 fn string_args(args: &[String]) -> Vec<&dyn Display> {
     args.iter().map(|a| a as &dyn Display).collect()
@@ -204,6 +211,15 @@ impl Checker {
         {
             return false;
         }
+        // Two different regular enum literals of one kind with different values (narrowing a union of enum members,
+        // such as `kind === SyntaxKind.X`) are likewise related by no relation: is_simple_type_related_to relates
+        // them only through equal values, and no later test applies to them.
+        if flags == target.flags()
+            && is_enum_literal_flags(flags)
+            && !source.as_literal_type().value_equals(target.as_literal_type())
+        {
+            return false;
+        }
         if relation != self.identity_relation {
             if relation == self.comparable_relation
                 && !target.flags().intersects(TypeFlags::Never)
@@ -295,9 +311,7 @@ impl Checker {
     ) -> bool {
         let s = source.flags();
         let t = target.flags();
-        const NUMBER_MEMBER: TypeFlags = TypeFlags::NumberLiteral.union(TypeFlags::EnumLiteral);
-        const STRING_MEMBER: TypeFlags = TypeFlags::StringLiteral.union(TypeFlags::EnumLiteral);
-        if s == t && (s == NUMBER_MEMBER || s == STRING_MEMBER) {
+        if s == t && is_enum_literal_flags(s) {
             return source.as_literal_type().value_equals(target.as_literal_type())
                 && self.is_enum_type_related_to(
                     source.symbol().unwrap(),
