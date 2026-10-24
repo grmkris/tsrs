@@ -128,22 +128,25 @@ locality; in the type-check pass a checker that runs out steals unstarted files 
   mutating it unless it is transient (e.g. `mergeSymbol`); so do we.
 - **Lazily initialized shared data** mirrors Go's synchronization: node/symbol ids are atomics, `SourceFile`
   line maps, position maps and identifier sets are `OnceLock`s, binding runs under a `std::sync::Once`
-  (Go `bindOnce`), the lazily parsed JSDoc cache is guarded by `jsdoc_mu` (Go `jsdocMu`).
+  (Go `bindOnce`), a file with lazy JSDoc keeps its JSDoc cache in an `RwLock`ed map (`lazy_jsdoc_cache`; Go
+  `jsdocCache` under `jsdocMu`) and a file without it in a `OnceLock` map the parser fills once (`jsdoc_cache`).
 
 Cell types for shared objects (`tsrs_core::frozen`):
 
 - `OwnedCell<T>`: `Cell` API (`get`/`set`/`replace`) for `Copy` fields of shared objects. Only the owner writes:
   the parser/binder before the file is bound, or a checker on objects it created.
 - `FrozenCell<T>`: `RefCell` API (`borrow`/`borrow_mut`) without a runtime borrow flag, for collections in shared
-  objects (`SymbolTable`, the lazily filled JSDoc cache, `TsConfigSourceFile`). `RefCell` cannot be used there: its flag is written by
-  `borrow()`, so concurrent readers race. Same owner rule for `borrow_mut`; `borrow_mut_locked` is for a cache
-  whose every access holds one lock. Never hold a `borrow_mut` guard across a call that reads the same cell.
+  objects. `RefCell` cannot be used there: its flag is written by `borrow()`, so concurrent readers race. Same owner
+  rule for `borrow_mut`. Never hold a `borrow_mut` guard across a call that reads the same cell. Its one user is
+  `SymbolTable`; shared data that is written after binding uses std locks instead (the `SourceFile` JSDoc caches,
+  `TsConfigSourceFile`).
 - `Cell`/`RefCell` stay fine for checker-owned objects (types, links, checker state).
 
 Checking the contract: build with `--features tsrs_core/checked-cells` (or a debug build) and run with
 `TSRS_CHECK_SHARED=1`. The pool then binds all files, records every arena allocation made so far as shared, and
 any `OwnedCell::set` / `FrozenCell::borrow_mut` on such an object panics with a backtrace pointing at the write.
-Checked builds also keep an atomic borrow counter in `FrozenCell` to catch aliasing like `RefCell` does.
+Checked builds also keep an atomic borrow counter in `FrozenCell` to catch aliasing like `RefCell` does. That
+counter is only in checked builds because readers pay for it (notes/unsafe-audit.md has the measurement).
 ThreadSanitizer is not usable here (the installed nightly's TSan runtime crashes at startup on this macOS).
 
 ### Function signatures
