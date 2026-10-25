@@ -24,7 +24,7 @@ pub use ptr::{
 mod frozen;
 pub use frozen::{
     FrozenCell, FrozenRef, FrozenRefMut, OwnedCell, OwnedPSliceCell, OwnedSliceCell, OwnedStrCell,
-    OwnedTaggedStrCell,
+    OwnedTaggedStrCell, WriteFlag,
 };
 
 pub mod collections;
