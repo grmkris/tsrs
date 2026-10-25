@@ -1,0 +1,93 @@
+# Builds the headless `tsrs-lint` helper of this fork's `lint-*` tags and publishes it as a GitHub release with a
+# SHA256SUMS file (README.md, "About this fork"). Consumers pin the tag and the sha256 and point oxlint at the binary
+# through OXLINT_TSGOLINT_PATH. Plain `cargo build --release` of the workspace profile: fat LTO, one codegen unit, no
+# PGO or BOLT. Nothing here publishes to npm.
+name: lint release
+
+on:
+  push:
+    tags: ["lint-*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The binary needs at most GLIBC_2.34; built on 24.04 it runs on any distribution with glibc 2.34 or newer.
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-24.04 }
+          - { target: aarch64-apple-darwin, os: macos-14 }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the pinned toolchain (rust-toolchain.toml)
+        run: |
+          rustup toolchain install
+          rustup show
+
+      - name: Build tsrs-lint
+        run: cargo build --release --locked -p tsrs_lint --bin tsrs-lint
+
+      - name: Smoke test the built binary on one headless request
+        run: .github/scripts/lint-smoke.sh target/release/tsrs-lint
+
+      - name: Stage the binary
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          mkdir -p dist
+          cp target/release/tsrs-lint "dist/tsrs-lint-$TARGET"
+          shasum -a 256 "dist/tsrs-lint-$TARGET"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tsrs-lint-${{ matrix.target }}
+          path: dist/tsrs-lint-${{ matrix.target }}
+          if-no-files-found: error
+
+  release:
+    name: publish the release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/lint-')
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Checksums
+        working-directory: dist
+        run: sha256sum tsrs-lint-* | tee SHA256SUMS
+
+      - name: Create the GitHub release
+        working-directory: dist
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          notes=$(cat <<NOTES
+          Headless \`tsrs-lint\` for oxlint's type-aware rules, built from \`$SHA\` (branch \`lint-pr624-regions\`: oxc-project/tsrs PR #624 plus the per-project allocation regions fix of oxc-project/tsrs#783).
+
+          Use it through \`OXLINT_TSGOLINT_PATH\`, pinned with its sha256 from \`SHA256SUMS\`. See the branch README, "About this fork".
+
+          \`\`\`
+          $(cat SHA256SUMS)
+          \`\`\`
+          NOTES
+          )
+          gh release create "$TAG" tsrs-lint-* SHA256SUMS --title "$TAG" --notes "$notes"
