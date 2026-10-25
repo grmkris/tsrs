@@ -1,4 +1,27 @@
-# `tsrs`
+# `tsrs` (grmkris fork: a prebuilt headless `tsrs-lint`)
+
+## About this fork
+
+This fork exists for one thing: **release binaries of the headless `tsrs-lint` helper**, the Rust replacement for
+`oxlint-tsgolint` that oxlint runs for its type-aware rules. Upstream has not released it yet, so this fork builds it.
+
+- **Branch `lint-pr624-regions`** is [oxc-project/tsrs PR #624](https://github.com/oxc-project/tsrs/pull/624) at
+  `0acc433` plus the fix for [oxc-project/tsrs#783](https://github.com/oxc-project/tsrs/issues/783): a headless
+  request kept every tsconfig project's arenas until it ended, so peak memory was the sum over projects. The fix frees
+  each project's regions with its program. Findings are unchanged.
+- **Tags `lint-<pr>-<base>-regions.<n>`** build it with [`.github/workflows/lint-release.yml`](.github/workflows/lint-release.yml)
+  for `x86_64-unknown-linux-gnu` (Ubuntu 24.04, needs glibc 2.34 or newer) and `aarch64-apple-darwin`, and publish the
+  binaries with a `SHA256SUMS` file as a GitHub release. The suffix `.<n>` increments for every rebuild of the same base.
+- **Using it:** pin a tag and its sha256, download `tsrs-lint-<target>` from the release, verify the sum, and run
+  oxlint with `OXLINT_TSGOLINT_PATH=/path/to/tsrs-lint`. Nothing else in oxlint changes.
+- **When it goes away:** as soon as upstream ships an equivalent headless release (an `oxlint-tsgolint` drop-in with
+  per-project regions). Watch [#624](https://github.com/oxc-project/tsrs/pull/624),
+  [#378](https://github.com/oxc-project/tsrs/issues/378) and [#783](https://github.com/oxc-project/tsrs/issues/783).
+  Nothing else is maintained here, and `main` is not updated.
+
+The upstream README follows.
+
+---
 
 [![npm](https://img.shields.io/npm/v/tsrs)](https://www.npmjs.com/package/tsrs)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/oxc-project/tsrs/blob/main/LICENSE)
