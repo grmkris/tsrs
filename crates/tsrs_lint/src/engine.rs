@@ -29,10 +29,26 @@ pub struct Options {
     pub suppress_program_diagnostics: bool,
 }
 
-#[derive(Default)]
-struct RequestRegions {
+/// What linting one project allocates: the main thread's target while its program is built and linted, the lint
+/// workers' regions and the file loader's. Lazily filled data of the program's objects goes to whichever of them is
+/// the current target, so all three live until the program is freed, and nothing else refers into them: every
+/// project builds its own program, and the request's file system caches are on the heap. Freeing them with the
+/// project bounds the request by its largest project instead of the sum of all of them.
+struct ProjectRegions {
+    // Dropped in declaration order, the loaders last: the other two point into them (as the watcher frees them).
     workers: Vec<tsrs_core::arena::Region>,
+    main: tsrs_core::arena::Region,
     loaders: Arc<tsrs_compiler::ProgramRegions>,
+}
+
+impl ProjectRegions {
+    fn new() -> ProjectRegions {
+        ProjectRegions {
+            workers: Vec::new(),
+            main: tsrs_core::arena::Region::new_scratch(1 << 20),
+            loaders: Arc::default(),
+        }
+    }
 }
 
 struct ConfigHost {
@@ -125,11 +141,10 @@ pub fn run(
     let fs: Arc<dyn FS> = Arc::new(bundled::wrap_fs(cachedvfs::from(Arc::new(fs))));
     let host =
         ConfigHostOwner(Box::leak(Box::new(ConfigHost { fs: Arc::clone(&fs), cwd: cwd.into() })));
+    // Project discovery; each project's program gets regions of its own (`ProjectRegions`).
     let region = tsrs_core::arena::Region::new_scratch(1 << 20);
-    // Shared caches can receive worker allocations, so every worker region outlives every request program.
-    let mut regions = RequestRegions::default();
     let _scope = region.enter();
-    run_in_region(payload, options, cwd, writer, fs, host.0, &mut regions)
+    run_in_region(payload, options, cwd, writer, fs, host.0)
 }
 
 struct ConfigHostOwner(&'static ConfigHost);
@@ -147,7 +162,8 @@ struct ProgramOwner(&'static Program);
 
 impl Drop for ProgramOwner {
     fn drop(&mut self) {
-        // SAFETY: each program is created once here, is never shared with another version, and all checker handles have been dropped.
+        // SAFETY: each program is created once here, is never shared with another version, and all checker handles
+        // have been dropped. Its `ProjectRegions` are dropped after it.
         unsafe {
             tsrs_compiler::free_unshared_program(self.0);
         }
@@ -161,7 +177,6 @@ fn run_in_region(
     writer: &mut dyn Write,
     fs: Arc<dyn FS>,
     host: &'static ConfigHost,
-    regions: &mut RequestRegions,
 ) -> Result<(), String> {
     let mut programs: BTreeMap<String, Vec<String>> = BTreeMap::new();
     let mut unmatched = Vec::new();
@@ -188,6 +203,9 @@ fn run_in_region(
     }
     drop(config_cache);
     for (config_path, files) in programs {
+        // Locals drop in reverse order at the end of each iteration: the program, the scope, then its regions.
+        let mut regions = ProjectRegions::new();
+        let _scope = regions.main.enter();
         let (config, diagnostics) = tsrs_tsoptions::get_parsed_command_line_of_config_file(
             &config_path,
             None,
@@ -235,6 +253,8 @@ fn run_in_region(
         )?;
     }
     if !unmatched.is_empty() {
+        let mut regions = ProjectRegions::new();
+        let _scope = regions.main.enter();
         let config = tsrs_tsoptions::new_parsed_command_line(
             P::new(CompilerOptions {
                 allow_js: Tristate::True,
