@@ -1,5 +1,9 @@
 # Union front cache and the generic-call inference memo (2026-10-05)
 
+Status (2026-10-24): the union front cache and indexed-access memo now default on in Go-compatible history too.
+Their existing opt-out and shadow modes remain available. See [Go-mode measurements and validation](perf-go-caches.md).
+The original experiment below predates this default change.
+
 Tasks 2 and 3 of the flow-memo handoff (notes/perf-flow-union-inference.md; their briefs are not kept), under the round-3
 rule (notes/perf-round3.md): caches Go does not have are allowed. Diagnostics, determinism, emit and the conformance
 baselines must not change, and anything on by default that departs from Go is off under `--checkerAssignment go`.

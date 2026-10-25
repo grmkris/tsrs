@@ -1152,9 +1152,9 @@ pub struct Checker {
     pub(crate) instantiation_count: u32,
     /// `TSRS_WORK_CENSUS` (workcensus.rs); None unless the variable is set.
     pub(crate) census: Option<Box<crate::workcensus::Census>>,
-    /// `TSRS_UNION_CACHE` (unioncache.rs; on by default, off under Go-compatible history).
+    /// `TSRS_UNION_CACHE` (unioncache.rs; on by default in both checker histories).
     pub(crate) union_front_cache: crate::unioncache::UnionFrontCache,
-    /// `TSRS_INFER_MEMO` (infermemo.rs; on by default, off under Go-compatible history).
+    /// `TSRS_INFER_MEMO` (infermemo.rs; on by default in both checker histories).
     pub(crate) infer_memo: crate::infermemo::InferMemo,
     /// Calls of `add_diagnostic` and `add_suggestion_diagnostic`, duplicates included (wrapping): the inference memo
     /// stores only walks that added none.

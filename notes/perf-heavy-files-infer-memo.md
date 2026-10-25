@@ -1,5 +1,9 @@
 # perf-heavy-files-infer-memo: the same inference walk made again and again
 
+Status (2026-10-24): the memo now defaults on in Go-compatible history too, with the same file assignment and
+checking order. `TSRS_INFER_MEMO=0` still disables it. See [Go-mode validation and measurements](perf-go-caches.md).
+The original experiment below predates that default change.
+
 The check phase of vscode, t3code-server, mui-docs and formbricks-web at 16-32 checkers is bounded by a few files
 (the task brief, 2026-10-07). This note is about the one of them whose cost is the algorithm itself, vscode's
 `src/vs/platform/agentHost/test/node/mapSessionEvents.test.ts` (0.35 s in a 0.78 s check at 16 checkers on the 64-vCPU

@@ -118,8 +118,8 @@ is type-checked, CI runs on pull requests, and the workspace is at 0.11.0. The i
 
 ## Round 3, union and inference work (#100, landed; notes/perf-union-inference.md)
 
-- **Union front cache** (`TSRS_UNION_CACHE`, crates/tsrs_checker/src/unioncache.rs; on by default and off under
-  Go-compatible history, `--checkerAssignment go`; its shadow mode is in docs/DEBUGGING.md). It is a direct-mapped table in front of `getUnionType` for calls without an origin. It stores
+- **Union front cache** (`TSRS_UNION_CACHE`, crates/tsrs_checker/src/unioncache.rs; on by default in both histories
+  since 2026-10-24, notes/perf-go-caches.md; its shadow mode is in docs/DEBUGGING.md). It is a direct-mapped table in front of `getUnionType` for calls without an origin. It stores
   a call only if that call created nothing but the union it returns, instantiated nothing, took no state-dependent
   reduction and did not return `errorType`.
   - Instructions: -0.5% to -1.1% on four corpora, with 1, 4 and 8 checkers.

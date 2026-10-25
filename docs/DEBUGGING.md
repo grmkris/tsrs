@@ -297,16 +297,17 @@ them with the memo on, off and in shadow mode.
 
 `getUnionType` calls with two or more inputs and no origin first look in a small direct-mapped table per checker
 (`crates/tsrs_checker/src/unioncache.rs`; 2^10 slots of 40 bytes, allocated on first use), keyed by the input handles
-in input order, the reduction mode and the alias (symbol and type arguments), at most 8 words. A call is stored only if
+in input order, the reduction mode and the alias (symbol and type arguments). Keys longer than 8 words use an exact
+hash table with the same store rules. A call is stored only if
 it created no type other than the union it returns, instantiated nothing, took neither the template-literal nor the
 constrained-type-variable reduction, and did not return `errorType` (the TS2590 path); the module comment has the
-argument for why a hit then returns exactly what the uncached call would. On by default, off under
-`--checkerAssignment go`. Diagnostics, `.types`/`.symbols` output and the `Types`/`Instantiations` counters are the
-same either way.
+argument for why a hit then returns exactly what the uncached call would. On by default in both checker histories,
+including `--checkerAssignment go` ([measurements](../notes/perf-go-caches.md)). Diagnostics,
+`.types`/`.symbols` output and the `Types`/`Instantiations` counters are the same either way.
 
 | variable | values | effect |
 | --- | --- | --- |
-| `TSRS_UNION_CACHE` | unset (on; off under `--checkerAssignment go`), `0`/`off`, `1`/`on` (on in every mode), `shadow` | `shadow` also computes the uncached answer at every hit and panics if it is a different type (the panic names the input type ids, the reduction and both answers) |
+| `TSRS_UNION_CACHE` | unset (on in both checker histories), `0`/`off`, `1`/`on`, `shadow` | `shadow` also computes the uncached answer at every hit and panics if it is a different type (the panic names the input type ids, the reduction and both answers) |
 | `TSRS_UNION_CACHE_STATS` | `1` | at exit, one line on stderr: lookups, hits, stores, why misses were not stored, calls that bypass the cache (shadow mode prints it too) |
 | `TSRS_UNION_CACHE_BITS` | default `10` | log2 of the table size. Larger tables hit slightly more often (2^12: 0.03% fewer instructions) but cost up to 2 MiB of RSS per checker (an allocation above mimalloc's medium size) |
 
@@ -314,6 +315,17 @@ To audit a change near union construction, run the suite and a corpus with `TSRS
 and the diagnostics must equal a `TSRS_UNION_CACHE=0` run, with no panics (`tsrs-test run --panic-summary`). A shadow
 failure means a stored call was not a function of its inputs: find which branch of `get_union_type_worker_inner` it
 took and either keep it out of the cache (count it in `union_front_cache.impure`) or fix the state it read.
+
+## The indexed-access memo and its shadow mode: `TSRS_IA_MEMO`
+
+Repeated indexed accesses through union indices, without an access node or alias, use a per-checker memo
+(`get_indexed_access_type_by_union_memoized` in `crates/tsrs_checker/src/checker_13.rs`). Its key includes the
+object type, index type and access flags. It stores only calls that create no type other than their result,
+instantiate nothing, take no impure union reduction, report no diagnostic and do not return `errorType`.
+
+`TSRS_IA_MEMO` accepts unset (on in both checker histories), `0`/`off`, `1`/`on`, and `shadow`. Shadow mode also
+computes the uncached answer at every hit and panics if it differs. Go's file assignment and checking order stay
+unchanged with this memo enabled ([measurements](../notes/perf-go-caches.md)).
 
 ## The inference walk memo and its shadow mode: `TSRS_INFER_MEMO`
 
@@ -324,13 +336,14 @@ candidate lists, priority and `topLevel`, and whether it cleared the cached infe
 took at least 16 `inferFromTypes` steps (and an earlier walk to the same target did too), created no type, symbol or signature, instantiated nothing, added no
 diagnostic, took no impure union reduction, read no transient state (the flow memo's taint frame around it), did not
 start inside an instantiation and, if it started with the instantiation count at 0, checked no expression; the
-module comment has the argument. On by default, off under `--checkerAssignment go`. It pays where one generic call is
+module comment has the argument. On by default in both checker histories, including `--checkerAssignment go`,
+whose file assignment and order are unchanged ([measurements](../notes/perf-go-caches.md)). It pays where one generic call is
 inferred many times from the same contextual type (vscode's `mapSessionEvents.test.ts`:
 notes/perf-heavy-files-infer-memo.md).
 
 | variable | values | effect |
 | --- | --- | --- |
-| `TSRS_INFER_MEMO` | unset (on; off under `--checkerAssignment go`), `0`/`off`, `1`/`on` (on in every mode), `shadow` | `shadow` also walks every hit from the same starting state and panics unless the walk again creates nothing but lazy member symbols, has no other effects and ends in the stored outcome (the panic names the type ids and both outcomes) |
+| `TSRS_INFER_MEMO` | unset (on in both checker histories), `0`/`off`, `1`/`on`, `shadow` | `shadow` also walks every hit from the same starting state and panics unless the walk again creates nothing but lazy member symbols, has no other effects and ends in the stored outcome (the panic names the type ids and both outcomes) |
 | `TSRS_INFER_MEMO_STATS` | `1` | at exit, one line on stderr: lookups, hits, the `inferFromTypes` steps the hits skipped, stores, and why long walks were not stored (shadow mode prints it too) |
 | `TSRS_INFER_MEMO_MIN_STEPS` | default `16` | the shortest walk (in `inferFromTypes` steps) that is stored; lower stores more walks (more memory, more lookups that pay) |
 

@@ -1,12 +1,12 @@
-//! The union front cache (`TSRS_UNION_CACHE`, on by default, off under Go-compatible history; docs/DEBUGGING.md,
+//! The union front cache (`TSRS_UNION_CACHE`, on by default in both checker histories; docs/DEBUGGING.md,
 //! notes/perf-union-inference.md).
 //!
 //! Most `getUnionType` calls build a union of a few types that was built before. Without the cache every such call
 //! flattens, sorts (`compareTypes` is structural), reduces literals, builds and hashes the type-list key and looks it up
 //! in `unionTypes` (or `unionOfUnionTypes`). The cache is a direct-mapped table (2^10 slots of 40 bytes per checker)
 //! in front of all of that. The key is the input handles in input order, the reduction mode and, with an alias, the
-//! alias symbol and type arguments (what `getAliasKey` hashes), at most `MAX_WORDS` words; calls with an origin, or
-//! with a longer key, go the normal way.
+//! alias symbol and type arguments (what `getAliasKey` hashes), at most `MAX_WORDS` words. Longer keys use an exact
+//! hash table with the same store rules; calls with an origin go the normal way.
 //!
 //! Exactness: an entry is stored only from a call that
 //! - created no type, or only the union it returns (`type_count` grew by one and the result has the last id): a fresh
@@ -28,7 +28,8 @@
 //! never freed while their checker lives, so a handle in a key is never reused for another type.
 //!
 //! `TSRS_UNION_CACHE=shadow` computes the uncached answer at every hit as well and panics if it is a different object.
-//! `TSRS_UNION_CACHE=0` turns the cache off, `=1` forces it on under Go-compatible history too.
+//! `TSRS_UNION_CACHE=0` turns the cache off, `=1` turns it on. Go-compatible history keeps its file assignment and
+//! checking order with the cache enabled (notes/perf-go-caches.md).
 //! `TSRS_UNION_CACHE_STATS=1` prints the totals (lookups, hits, stores, why misses were not stored, calls that bypass
 //! the cache) on stderr at exit; `TSRS_UNION_CACHE_BITS=<n>` sets the table size (default 10; larger tables cost RSS,
 //! notes/perf-union-inference.md).
@@ -56,26 +57,19 @@ fn env_mode() -> Option<UnionCacheMode> {
 }
 
 /// The mode of the indexed-access memo (`TSRS_IA_MEMO`, `checker_13.rs`
-/// `get_indexed_access_type_by_union_memoized`): on unless turned off or under Go-compatible history, like
-/// the union front cache.
+/// `get_indexed_access_type_by_union_memoized`): on in both checker histories unless explicitly turned off.
 pub fn indexed_access_memo_mode() -> UnionCacheMode {
     static MODE: OnceLock<UnionCacheMode> = OnceLock::new();
     *MODE.get_or_init(|| match std::env::var("TSRS_IA_MEMO").as_deref() {
         Ok("0" | "off") => UnionCacheMode::Off,
-        Ok("1" | "on") => UnionCacheMode::On,
         Ok("shadow") => UnionCacheMode::Shadow,
-        _ if tsrs_core::compat::go_compatible_history() => UnionCacheMode::Off,
         _ => UnionCacheMode::On,
     })
 }
 
-/// The mode for a checker created now: the environment's; by default on, except under Go-compatible history.
+/// The mode for a checker created now: the environment's; by default on in both checker histories.
 pub fn union_cache_mode() -> UnionCacheMode {
-    match env_mode() {
-        Some(mode) => mode,
-        None if tsrs_core::compat::go_compatible_history() => UnionCacheMode::Off,
-        None => UnionCacheMode::On,
-    }
+    env_mode().unwrap_or(UnionCacheMode::On)
 }
 
 fn stats_on() -> bool {
